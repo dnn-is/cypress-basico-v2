@@ -2,6 +2,7 @@
 
 
 
+
 describe('Central de Atendimento ao Cliente TAT', function(){
 
     beforeEach(() => {
@@ -79,6 +80,7 @@ describe('Central de Atendimento ao Cliente TAT', function(){
         cy.get('@campoSobrenome').type(sobreNome)
         cy.get('@campoEmail').type(emailErrado)
         cy.get('@campoAjudaTexto').type(textAjuda)
+        cy.get('#phone-checkbox').check()
         cy.contains('button', 'Enviar').click()
         //cy.get('@btnEnviar').click()
 
@@ -190,4 +192,42 @@ describe('Central de Atendimento ao Cliente TAT', function(){
 
         cy.get('span[class="phone-label-span required-mark"]').should('be.visible')
     });
+
+    it('Seleciona um arquivo da pasta fixtures', () => {
+        cy.get('#file-upload')
+        .should('not.have.value')
+        .selectFile('./cypress/fixtures/example.json')
+        .should(function($input) {
+            expect($input[0].files[0].name).to.equal('example.json')
+        })
+    });
+
+    it('Seleciona um arquivo simulando um drag-and-drop', () => {
+        cy.get('#file-upload')
+        .should('not.have.value')
+        .selectFile('./cypress/fixtures/example.json', {action: 'drag-drop'})
+        .should(function($input) {
+            expect($input[0].files[0].name).to.equal('example.json')
+        })
+    });
+
+    it('Seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', () => {
+        cy.fixture('example.json').as('sampleFile')
+        cy.get('#file-upload')
+        .selectFile('@sampleFile')
+        .should(function($input) {
+            expect($input[0].files[0].name).to.equal('example.json')
+        })
+    });
+
+    it('Verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+        cy.contains('a', 'Política de Privacidade').should('have.attr', 'target', '_blank')
+    });
+
+    it.only('Acessa a página da política de privacidade removendo o target e então clicando no link', () => {
+        cy.contains('a', 'Política de Privacidade').invoke('removeAttr', 'target').click()
+        
+    });
+
+  
 })
