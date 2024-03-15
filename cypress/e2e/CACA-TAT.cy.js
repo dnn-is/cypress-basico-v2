@@ -190,7 +190,7 @@ describe('Central de Atendimento ao Cliente TAT', function(){
         cy.get('input[type="checkbox"][id="phone-checkbox"]').check()
 
 
-        cy.get('span[class="phone-label-span required-mark"]').should('be.empty')
+        cy.get('span[class="phone-label-span required-mark"]').should('be.visible')
     });
 
     it('Seleciona um arquivo da pasta fixtures', () => {
